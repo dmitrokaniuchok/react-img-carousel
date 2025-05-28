@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./styles.css";
+import toast, { Toaster } from "react-hot-toast";
 
-function App() {
-  const [count, setCount] = useState(0)
+const images = [
+  "https://images.pexels.com/photos/3836292/pexels-photo-3836292.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/2792157/pexels-photo-2792157.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/1166209/pexels-photo-1166209.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/1661179/pexels-photo-1661179.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/1076758/pexels-photo-1076758.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/1172064/pexels-photo-1172064.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+  "https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=600",
+];
+
+export default function App() {
+  const [current, setCurrent] = useState(0);
+
+  function nextSlide() {
+    if (current === images.length - 1) {
+      toast.dismiss();
+      toast.error("This is the last image!");
+      return;
+    }
+    setCurrent((prev) => prev + 1);
+  }
+
+  function prevSlide() {
+    if (current === 0) {
+      toast.dismiss();
+      toast.error("This is the first image!");
+      return;
+    }
+    setCurrent((prev) => prev - 1);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="carousel">
+      <h2>Carousel</h2>
+      <Toaster position="top-right" />
+      <div className="slider-wrapper">
+        <button
+          onClick={prevSlide}
+          className={`nav-button ${current === 0 ? "disabled" : ""}`}
+        >
+          ⬅ Prev
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
 
-export default App
+        <div className="slide-container">
+          <img src={images[current]} alt="slide" className="slide active" />
+        </div>
+
+        <button
+          onClick={nextSlide}
+          className={`nav-button ${
+            current === images.length - 1 ? "disabled" : ""
+          }`}
+        >
+          Next ➡
+        </button>
+      </div>
+    </div>
+  );
+}
